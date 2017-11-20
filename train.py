@@ -77,6 +77,7 @@ print('Using spatial binning of:',spatial,
     'and', histbin,'histogram bins')
 print('Feature vector length:', len(X_train[0]))
 
+"""
 # Use a linear SVC
 svc = LinearSVC()
 parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
@@ -142,4 +143,3 @@ print('racall:{0:.3f}'.format(recall_score(y_test, pred)))
 print('fscore:{0:.3f}'.format(f1_score(y_test, pred)))
 print()
 
-"""

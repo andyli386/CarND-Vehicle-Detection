@@ -2,6 +2,7 @@ import matplotlib.image as mpimg
 import numpy as np
 import cv2
 from skimage.feature import hog
+import matplotlib.pyplot as plt
 
 def convert_color(img, conv='RGB2YCrCb'):
     if conv == 'RGB2YCrCb':
@@ -239,8 +240,11 @@ def find_cars(img, ystart, ystop, scale, clf, X_scaler, orient, pix_per_cell, ce
                 win_draw = np.int(window * scale)
                 cv2.rectangle(draw_img, (xbox_left, ytop_draw + ystart),
                               (xbox_left + win_draw, ytop_draw + win_draw + ystart), (0, 0, 255), 6)
+
                 bbox_list.append(
                     ((xbox_left, ytop_draw + ystart), (xbox_left + win_draw, ytop_draw + win_draw + ystart)))
+                #plt.imshow(draw_img)
+                #plt.show()
 
     return draw_img, bbox_list
 
