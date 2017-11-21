@@ -3,10 +3,14 @@ import numpy as np
 import cv2
 from skimage.feature import hog
 import matplotlib.pyplot as plt
+def convert_color(img, conv='RGB2YUV'):
+    if conv == 'RGB2YUV':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
+    if conv == 'BGR2YCrCb':
+        return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    if conv == 'RGB2LUV':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2)
 
-def convert_color(img, conv='RGB2YCrCb'):
-    if conv == 'RGB2YCrCb':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
     if conv == 'BGR2YCrCb':
         return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     if conv == 'RGB2LUV':
@@ -173,7 +177,7 @@ def find_cars(img, ystart, ystop, scale, clf, X_scaler, orient, pix_per_cell, ce
     img = img.astype(np.float32) / 255
 
     img_tosearch = img[ystart:ystop, :, :]
-    ctrans_tosearch = convert_color(img_tosearch, conv='RGB2YCrCb')
+    ctrans_tosearch = convert_color(img_tosearch, conv='RGB2YUV')
     if scale != 1:
         imshape = ctrans_tosearch.shape
         ctrans_tosearch = cv2.resize(ctrans_tosearch, (np.int(imshape[1] / scale), np.int(imshape[0] / scale)))
@@ -207,10 +211,10 @@ def find_cars(img, ystart, ystop, scale, clf, X_scaler, orient, pix_per_cell, ce
             xpos = xb * cells_per_step
             # Extract HOG for this patch
             hog_feat1 = hog1[ypos:ypos + nblocks_per_window, xpos:xpos + nblocks_per_window].ravel()
-            #hog_feat2 = hog2[ypos:ypos + nblocks_per_window, xpos:xpos + nblocks_per_window].ravel()
-            #hog_feat3 = hog3[ypos:ypos + nblocks_per_window, xpos:xpos + nblocks_per_window].ravel()
-            #hog_features = np.hstack((hog_feat1, hog_feat2, hog_feat3))
-            hog_features = np.hstack((hog_feat1))
+            hog_feat2 = hog2[ypos:ypos + nblocks_per_window, xpos:xpos + nblocks_per_window].ravel()
+            hog_feat3 = hog3[ypos:ypos + nblocks_per_window, xpos:xpos + nblocks_per_window].ravel()
+            hog_features = np.hstack((hog_feat1, hog_feat2, hog_feat3))
+            #hog_features = np.hstack((hog_feat1))
 
             xleft = xpos * pix_per_cell
             ytop = ypos * pix_per_cell
