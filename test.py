@@ -10,10 +10,10 @@ from scipy.ndimage import label
 from lesson_functions import *
 from sklearn.externals import joblib
 
-dist_pickle = pickle.load(open("model_save/dist1.p", "rb"))
+dist_pickle = pickle.load(open("model_save/dist2.p", "rb"))
 
 svc = dist_pickle["svc"]
-#clf = dist_pickle["clf"]
+clf = dist_pickle["clf"]
 X_scaler = dist_pickle["X_scaler"]
 orient = dist_pickle["orient"]
 pix_per_cell = dist_pickle["pix_per_cell"]
@@ -33,10 +33,10 @@ ystop = 656
 #print(pix_per_cell, cell_per_block, spatial_size)
 def pipeline(image):
     bbox_list =  []
-    for scale in range(10, 30, 3):
+    for scale in range(10, 30, 2):
         scale /= 10
         #print(scale)
-        draw_image, box_list = find_cars(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins)
+        draw_image, box_list = find_cars(image, ystart, ystop, scale, clf, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins)
         #print(box_list)
         bbox_list.extend(box_list)
 
@@ -59,7 +59,7 @@ def pipeline(image):
 
     return draw_img
 
-history = deque(maxlen=10)
+history = deque(maxlen=8)
 #out_img = pipeline(img)
 #plt.imshow(out_img)
 #plt.show()
