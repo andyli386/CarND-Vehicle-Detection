@@ -77,10 +77,8 @@ print('Using spatial binning of:',spatial,
     'and', histbin,'histogram bins')
 print('Feature vector length:', len(X_train[0]))
 
-"""
 # Use a linear SVC
 svc = LinearSVC()
-parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
 # Check the training time for the SVC
 t=time.time()
 svc.fit(X_train, y_train)
@@ -104,7 +102,7 @@ dist = {'svc': svc,
             'hist_bins': histbin,
             'Training Time': round(t2 - t, 2),
             'color_space': color_space}
-pickle.dump(dist, open("model_save/dist.p", "wb"))
+pickle.dump(dist, open("model_save/dist3.p", "wb"))
 pred = svc.predict(X_test)
 print('precision:{0:.3f}'.format(precision_score(y_test, pred)))
 print('racall:{0:.3f}'.format(recall_score(y_test, pred)))
@@ -144,3 +142,4 @@ print('racall:{0:.3f}'.format(recall_score(y_test, pred)))
 print('fscore:{0:.3f}'.format(f1_score(y_test, pred)))
 print()
 
+"""
