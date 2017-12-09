@@ -57,6 +57,8 @@ notcar_features = extract_features(notcars, color_space='LUV', spatial_size=(spa
                                 hog_channel=hog_channel)
 
 # Create an array stack of feature vectors
+print('car_features', len(car_features))
+print('notcar_features', len(notcar_features))
 X = np.vstack((car_features, notcar_features)).astype(np.float64)
 # Fit a per-column scaler
 X_scaler = StandardScaler().fit(X)

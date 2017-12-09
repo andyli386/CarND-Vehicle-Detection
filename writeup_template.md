@@ -38,7 +38,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the `lesson_functions.py` in line 20.
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -53,31 +53,30 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+I tried various combinations of parameters and used the `LUV` color space. It's much easier to extract the features.
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+I trained a linear SVM using a library in sklearn. The code for this step is in `train.py` in line 117. I used `LUV` color space and spatial, hist and hog features for vehicle and non-vehicle images. I extracted features with the `extract_features` function in `train.py` line 52 and 55. Then I stack vehicle and non-vehicel together to be the train set. And the same to train label. The svm parameters are `{'kernel':('linear', 'rbf'), 'C':[1, 10]}` 
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+I decided to search random window positions at several scales from 1.3 to 2.8 with the interval 0.3 all over the image and if the prediction is 1, I would store the lines of the box. 
 
 ![alt text][image3]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately I searched on two scales using LUV 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result. 
 
-![alt text][image4]
 ---
 
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](https://youtu.be/_sJgx5YyVzo)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
@@ -106,3 +105,4 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
+Firstly, I built a classifier with svm and I extracted the features including HOG features spatially binned color and histograms of color and trained with the provided vehicles and non-vehicles iamges. Then I record the position in each frame of the video and created a heatmap  to identify vehicle positions. Finally I drawed the bounding boxes to cover the detected area. This approach is very inefficient and time-consuming. I even processed the video with hours. There is a very fast way to detect objects that is yolo. I will try to sovle the problem with yolo. 
