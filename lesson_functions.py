@@ -8,9 +8,6 @@ def convert_color(img, conv='RGB2YUV'):
         return cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
     if conv == 'BGR2YCrCb':
         return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
-    if conv == 'RGB2LUV':
-        return cv2.cvtColor(img, cv2.COLOR_RGB2)
-
     if conv == 'BGR2YCrCb':
         return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     if conv == 'RGB2LUV':
@@ -98,13 +95,18 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
             if hog_channel == 'ALL':
                 hog_features = []
                 for channel in range(feature_image.shape[2]):
-                    hog_features.append(get_hog_features(feature_image[:, :, channel],
+                    get_hog =get_hog_features(feature_image[:, :, channel],
                                                          orient, pix_per_cell, cell_per_block,
-                                                         vis=False, feature_vec=True))
+                                                         vis=False, feature_vec=True)
+
+                    #print(channel, np.any(np.isnan(get_hog)))
+                    hog_features.append(get_hog)
                 hog_features = np.ravel(hog_features)
             else:
                 hog_features = get_hog_features(feature_image[:, :, hog_channel], orient,
                                                 pix_per_cell, cell_per_block, vis=False, feature_vec=True)
+
+                print(np.any(np.isnan(hog_features)))
             # Append the new feature vector to the features list
             file_features.append(hog_features)
         features.append(np.concatenate(file_features))

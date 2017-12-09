@@ -42,17 +42,17 @@ notcars = glob.glob('test_images/non-vehicles/*/*.png')
 orient=9
 pix_per_cell=8
 cell_per_block=2
-hog_channel=0
-spatial = 16
-histbin = 16
-color_space = 'LUV'
+hog_channel= 'ALL'
+spatial = 32
+histbin = 32
+color_space = 'YUV'
+samples = 300
 
 
-
-car_features = extract_features(cars, color_space='LUV', spatial_size=(spatial, spatial),
+car_features = extract_features(cars, color_space=color_space, spatial_size=(spatial, spatial),
                         hist_bins=histbin, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                                 hog_channel=hog_channel)
-notcar_features = extract_features(notcars, color_space='LUV', spatial_size=(spatial, spatial),
+notcar_features = extract_features(notcars, color_space=color_space, spatial_size=(spatial, spatial),
                         hist_bins=histbin, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block,
                                 hog_channel=hog_channel)
 
@@ -60,9 +60,9 @@ notcar_features = extract_features(notcars, color_space='LUV', spatial_size=(spa
 print('car_features', len(car_features))
 print('notcar_features', len(notcar_features))
 X = np.vstack((car_features, notcar_features)).astype(np.float64)
+print(len(X))
 # Fit a per-column scaler
 X_scaler = StandardScaler().fit(X)
-print(len(X))
 # Apply the scaler to X
 scaled_X = X_scaler.transform(X)
 
@@ -79,10 +79,8 @@ print('Using spatial binning of:',spatial,
     'and', histbin,'histogram bins')
 print('Feature vector length:', len(X_train[0]))
 
-"""
 # Use a linear SVC
 svc = LinearSVC()
-parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
 # Check the training time for the SVC
 t=time.time()
 svc.fit(X_train, y_train)
@@ -106,7 +104,7 @@ dist = {'svc': svc,
             'hist_bins': histbin,
             'Training Time': round(t2 - t, 2),
             'color_space': color_space}
-pickle.dump(dist, open("model_save/dist.p", "wb"))
+pickle.dump(dist, open("model_save/dist3.p", "wb"))
 pred = svc.predict(X_test)
 print('precision:{0:.3f}'.format(precision_score(y_test, pred)))
 print('racall:{0:.3f}'.format(recall_score(y_test, pred)))
@@ -136,12 +134,14 @@ dist = {'svc': svc,
             'hist_bins': histbin,
             'Training Time': round(t2 - t, 2),
             'color_space': color_space}
-pickle.dump(dist, open("model_save/dist.p", "wb"))
+pickle.dump(dist, open("model_save/dist2.p", "wb"))
 
 
 pred = clf.predict(X_test)
+
 print('precision:{0:.3f}'.format(precision_score(y_test, pred)))
 print('racall:{0:.3f}'.format(recall_score(y_test, pred)))
 print('fscore:{0:.3f}'.format(f1_score(y_test, pred)))
 print()
 
+"""
